@@ -45,14 +45,20 @@ for c in df.columns:
           pass  
 
         ax.set(xlabel=c,ylabel="Average Mark")
-        ax.set_xlim(0,100)
-        ax.set_ylim(0,100)
-        for l in [40,50,60,70]: #draw lines for first etc boundaries
+        #ax.set_xlim(0,100)
+        #ax.set_ylim(0,100)
+        #for l in [40,50,60,70]: #draw lines for first etc boundaries
+        ax.set_xlim(0,22) #use cgs marks instead
+        ax.set_ylim(0,22)
+        for l in [9,12,15,18]:
           ax.axhline(y=l,c='Blue')
           ax.axvline(x=l,c='Blue')
         plt.savefig(c+".pdf")
 
-plt.clf()
-seaborn.set_context("notebook",font_scale=0.5)
-seaborn.violinplot(data=df,cut=0,fontsize=8)
-plt.savefig("comparisonPlot.pdf")
+for c in df.columns:
+  plt.clf()
+  seaborn.set_context("notebook",font_scale=0.5)
+  ax=seaborn.violinplot(y=df[c],cut=0,fontsize=8)
+  ax.set_ylim(0,22)
+  #seaborn.violinplot(data=df,cut=0,fontsize=8)
+  plt.savefig(c+"ViolinPlot.pdf")
