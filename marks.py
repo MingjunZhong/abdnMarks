@@ -57,7 +57,10 @@ def read_file(filename):
 def create_scatter(df,module):
   #to create a scatter plot, we find each student, get their average mark across all modules except this one and plot it against this one.
   df2=pd.DataFrame({"avg":(df.sum(axis=1)-df[module])/(df.count(axis=1)-1),module:df[module]})
+  
   plt.clf()
+  sns.set_context("notebook",font_scale=0.5)
+  sns.set(style="white")
   ax=df2.plot.scatter(x=module,y="avg",c='Black')
   model=sm.OLS(df2["avg"],sm.add_constant(df2[module]),missing='drop')
   abline_plot(model_results=model.fit(),ax=ax,c="Red")
@@ -75,7 +78,7 @@ def create_violin(module):
   #module is the column
   plt.clf()
   sns.set_context("notebook",font_scale=0.5)
-  sns.set(style="whitegrid")
+  sns.set(style="white")
   ax=sns.violinplot(y=module,cut=0,fontsize=8)
   ax.set_ylim(0,22)
   plt.savefig(module.name+"Violin.png")
