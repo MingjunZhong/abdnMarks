@@ -6,6 +6,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 import statsmodels.api as sm
 from statsmodels.graphics.regressionplots import abline_plot
+import os, fnmatch
 
 
 #### ASSUMPTIONS
@@ -18,7 +19,9 @@ from statsmodels.graphics.regressionplots import abline_plot
 COURSENAMELOCATION=(1,0)
 
 def read_file(filename):
-  df=pd.read_excel(filename,sheet_name=0,header=None,na_values=["MC","GC","NP"])
+  # Note that to read .xlsx files using pandas, it requires `openpyxl' and also
+  # need engine='openpyxl'.
+  df=pd.read_excel(filename,engine='openpyxl',sheet_name=0,header=None,na_values=["MC","GC","NP"])
 
   #start by pulling out course name
   coursename=df.iloc[COURSENAMELOCATION].split(' ')[0]
@@ -98,7 +101,20 @@ def read_files(filearray):
     return df
 
 ########################################################
-df=read_files(sys.argv[1:])
+
+# find all *.xlsx files 
+def find_xlsx():
+    listOfAllFiles = os.listdir('.')
+    pattern = "*.xlsx"
+    listFiles = []
+    for file in listOfAllFiles:
+        if fnmatch.fnmatch(file,pattern):
+            listFiles.append(file)
+    return listFiles
+
+listFiles = find_xlsx()
+df=read_files(listFiles)
+#df=read_files(sys.argv[1:])
 
 #now df contains students and courses, so we can just create the relevant violin plots and scatter plots  
 for m in df.columns:
